@@ -1,31 +1,53 @@
 #include "editor.h"
-
 #include <iostream>
+#include <fstream>
 #include <QPushButton>
 #include <QTextEdit>
 #include <QLabel>
 #include <QPixmap>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QGraphicsScene>
+
+using namespace std;
 
 Editor::Editor(QWidget *parent) 
 	:QWidget(parent) {
 		// Initialize the components
-		QPixmap *pix = new QPixmap("test.jpg");
-		image = new QLabel(this);
-		image->setPixmap(*pix);
-		image->setScaledContents(true);
+		// LHS
+		scene = new QGraphicsScene(this);
+		image = new QGraphicsView(scene);
+		image->setScene(scene);
+		image->setDragMode(QGraphicsView::RubberBandDrag);
+		scene->setBackgroundBrush(Qt::gray);
+		// Radios
+		whitelist = new QGroupBox();
+		white = new QRadioButton("white");
+		gray = new QRadioButton("gray");
+		black = new QRadioButton("black");
+		whitelist->setStyleSheet("border:0");
+		defaultRadio = white;
+		defaultRadio->setChecked(true);
+		// RHS
+		fileRead = new QGroupBox();
+		fileInput = new QLineEdit();
+		loadButton = new QPushButton("load");
+
 		input = new QTextEdit(this);
+		// Buttons
 		save = new QPushButton("save", this);
-		save->setGeometry(10, 10, 80, 90);
 		prev = new QPushButton("prev", this);
-		prev->setGeometry(110, 10, 80, 90);
 		next = new QPushButton("next", this);
-		next->setGeometry(210, 10, 80, 90);
 
 		// Add handlers
 		connect(save, SIGNAL (clicked()), this, SLOT (saveClicked()));
 		connect(prev, SIGNAL (clicked()), this, SLOT (prevClicked()));
 		connect(next, SIGNAL (clicked()), this, SLOT (nextClicked()));
+		connect(loadButton, SIGNAL (clicked()), this, SLOT (loadClicked()));
 
 		// Do layout
 		QGridLayout *layout = new QGridLayout;
@@ -33,33 +55,84 @@ Editor::Editor(QWidget *parent)
 		layout->setColumnStretch(1, 10);
 		layout->setColumnStretch(2, 10);
 		layout->setColumnStretch(3, 10);
-
+		// LHS
+		// Image
 		layout->addWidget(image, 0, 0, 2, 1);
-		layout->addWidget(input, 0, 1, 1, 3);
-		layout->addWidget(prev, 1, 1);
-		layout->addWidget(save, 1, 2);
-		layout->addWidget(next, 1, 3);
+		// Radio
+		QHBoxLayout *radioBox = new QHBoxLayout;
+		radioBox->addWidget(white);
+		radioBox->addWidget(gray);
+		radioBox->addWidget(black);
+		radioBox->addStretch(1);
+		whitelist->setLayout(radioBox);
+		layout->addWidget(whitelist, 2, 0, Qt::AlignRight);
+		// RHS
+		// File input
+		QHBoxLayout *fileBox = new QHBoxLayout;
+		fileBox->addWidget(fileInput);
+		fileBox->addWidget(loadButton);
+		fileBox->setStretch(0, 1);
+		fileBox->setStretch(1, 0);
+		fileRead->setLayout(fileBox);
+		layout->addWidget(fileRead, 0, 1, 1, 3);
+		// Text Editor
+		layout->addWidget(input, 1, 1, 1, 3);
+		// Buttons
+		layout->addWidget(prev, 2, 1);
+		layout->addWidget(save, 2, 2);
+		layout->addWidget(next, 2, 3);
 
 		setLayout(layout);
-
-		
-
 
 }
 
 void Editor::saveClicked() {
-	std::cout  << "saved" << std::endl;
-	std::cout << input->toPlainText().toStdString() << std::endl;
+	cout << input->toPlainText().toStdString() << endl;
 
-	QPixmap *pix = new QPixmap("test2.jpg");
-	image->setPixmap(*pix);
+	// Write image to file
+	ofstream file;
+	file.open("test.txt");
 
+	file << input->toPlainText().toStdString() << endl;
+	file.close();
+
+	cout << getCheckedRadio() << endl;
+}
+
+string Editor::getCheckedRadio() {
+	if (white->isChecked()) {
+		return "white";
+	} 
+	if (gray->isChecked()) {
+		return "gray";
+	} 
+	if (black->isChecked()) {
+		return "black";
+	} 
+	return "";
 }
 
 void Editor::prevClicked() {
-	std::cout << "back" << std::endl;
 }
 
 void Editor::nextClicked() {
-	std::cout << "forward" << std::endl;
+	loadFile("input_test.txt");
+}
+
+void Editor::loadFile(string fileName) {
+	// Read from the file
+	ifstream file(fileName.c_str());
+	string s = "";
+	for (string line; getline(file, line); ) {
+		s.append(line).append("\n");
+	}
+	input->setText(QString::fromStdString(s));
+	// Reset the radio buttons
+	defaultRadio->setChecked(true);
+}
+
+void Editor::loadClicked() {
+	QPixmap *pix = new QPixmap("test.jpg");
+	scene->addPixmap(*pix);
+	image->fitInView(pix->rect(), Qt::KeepAspectRatio);
 }
