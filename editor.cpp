@@ -1,6 +1,8 @@
 #include "editor.h"
 #include <iostream>
 #include <fstream>
+#include <dirent.h>
+
 #include <QPushButton>
 #include <QTextEdit>
 #include <QLabel>
@@ -119,6 +121,18 @@ void Editor::nextClicked() {
 	loadFile("input_test.txt");
 }
 
+void getAllFiles() {
+	DIR *dir;
+	class dirent *ent;
+
+	dir = opendir("scans");
+	cout << "hi" << endl;
+	while ((ent = readdir(dir)) != NULL) {
+		const string file_name = ent->d_name;
+		cout << file_name << endl;
+	}
+}
+
 void Editor::loadFile(string fileName) {
 	// Read from the file
 	ifstream file(fileName.c_str());
@@ -129,10 +143,13 @@ void Editor::loadFile(string fileName) {
 	input->setText(QString::fromStdString(s));
 	// Reset the radio buttons
 	defaultRadio->setChecked(true);
+
+
 }
 
 void Editor::loadClicked() {
-	QPixmap *pix = new QPixmap("test.jpg");
+	QPixmap *pix = new QPixmap("scans/IMG_20170419_184822.jpg");
 	scene->addPixmap(*pix);
 	image->fitInView(pix->rect(), Qt::KeepAspectRatio);
+	getAllFiles();
 }

@@ -1,0 +1,8 @@
+- save the last written file
+- load the last written file into text box
+- add metadata field to ui
+- write metadata to file on save
+- read metadata from file on save
+- allow image cropping
+- toggle between cropped and non cropped
+- ui to save crop to directory
