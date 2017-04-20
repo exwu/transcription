@@ -5,4 +5,3 @@
 - read metadata from file on save
 - allow image cropping
 - toggle between cropped and non cropped
-- ui to save crop to directory

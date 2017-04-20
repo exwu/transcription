@@ -28,8 +28,11 @@ class Editor: public QWidget {
 		QPushButton *save;
 		QPushButton *prev;
 		QPushButton *next;
+
 		QGraphicsView *image;
 		QGraphicsScene *scene;
+		QPushButton *saveCrop;
+		QPushButton *toggleCrop;
 
 		QGroupBox *whitelist;
 		QRadioButton *white;

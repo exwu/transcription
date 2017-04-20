@@ -26,6 +26,10 @@ Editor::Editor(QWidget *parent)
 		image->setScene(scene);
 		image->setDragMode(QGraphicsView::RubberBandDrag);
 		scene->setBackgroundBrush(Qt::gray);
+		// Image cropping
+		saveCrop = new QPushButton("save crop", this);
+		toggleCrop = new QPushButton("view crop", this);
+		toggleCrop->setCheckable(true);
 		// Radios
 		whitelist = new QGroupBox();
 		white = new QRadioButton("white");
@@ -34,6 +38,7 @@ Editor::Editor(QWidget *parent)
 		whitelist->setStyleSheet("border:0");
 		defaultRadio = white;
 		defaultRadio->setChecked(true);
+
 		// RHS
 		fileRead = new QGroupBox();
 		fileInput = new QLineEdit();
@@ -53,21 +58,26 @@ Editor::Editor(QWidget *parent)
 
 		// Do layout
 		QGridLayout *layout = new QGridLayout;
-		layout->setColumnStretch(0, 30);
+		layout->setColumnStretch(0, 10);
 		layout->setColumnStretch(1, 10);
 		layout->setColumnStretch(2, 10);
 		layout->setColumnStretch(3, 10);
+		layout->setColumnStretch(4, 10);
+		layout->setColumnStretch(5, 10);
 		// LHS
 		// Image
-		layout->addWidget(image, 0, 0, 2, 1);
+		layout->addWidget(image, 0, 0, 2, 3);
+		// Cropping
+		layout->addWidget(saveCrop, 2, 0);
+		layout->addWidget(toggleCrop, 2, 1);
 		// Radio
 		QHBoxLayout *radioBox = new QHBoxLayout;
 		radioBox->addWidget(white);
 		radioBox->addWidget(gray);
 		radioBox->addWidget(black);
-		radioBox->addStretch(1);
 		whitelist->setLayout(radioBox);
-		layout->addWidget(whitelist, 2, 0, Qt::AlignRight);
+		layout->addWidget(whitelist, 2, 2, Qt::AlignRight);
+		
 		// RHS
 		// File input
 		QHBoxLayout *fileBox = new QHBoxLayout;
@@ -76,13 +86,13 @@ Editor::Editor(QWidget *parent)
 		fileBox->setStretch(0, 1);
 		fileBox->setStretch(1, 0);
 		fileRead->setLayout(fileBox);
-		layout->addWidget(fileRead, 0, 1, 1, 3);
+		layout->addWidget(fileRead, 0, 3, 1, 3);
 		// Text Editor
-		layout->addWidget(input, 1, 1, 1, 3);
+		layout->addWidget(input, 1, 3, 1, 3);
 		// Buttons
-		layout->addWidget(prev, 2, 1);
-		layout->addWidget(save, 2, 2);
-		layout->addWidget(next, 2, 3);
+		layout->addWidget(prev, 2, 3);
+		layout->addWidget(save, 2, 4);
+		layout->addWidget(next, 2, 5);
 
 		setLayout(layout);
 
@@ -148,8 +158,7 @@ void Editor::loadFile(string fileName) {
 }
 
 void Editor::loadClicked() {
-	QPixmap *pix = new QPixmap("scans/IMG_20170419_184822.jpg");
+	QPixmap *pix = new QPixmap("scans/0000.jpg");
 	scene->addPixmap(*pix);
 	image->fitInView(pix->rect(), Qt::KeepAspectRatio);
-	getAllFiles();
 }
