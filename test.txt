@@ -1,0 +1,6 @@
+this is a test
+
+to see how reading
+a
+ file works.
+
