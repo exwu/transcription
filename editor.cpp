@@ -1,7 +1,9 @@
 #include "editor.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #include <QPushButton>
 #include <QTextEdit>
@@ -14,13 +16,15 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QGraphicsScene>
-#include <QPointF>
-#include <QRect>
 
 using namespace std;
 
+string formatNumber(int);
+
 Editor::Editor(QWidget *parent) 
 	:QWidget(parent) {
+		currentPage = -1;
+
 		// Initialize the components
 		// LHS
 		scene = new QGraphicsScene(this);
@@ -35,12 +39,18 @@ Editor::Editor(QWidget *parent)
 		whitelist->setStyleSheet("border:0");
 		defaultRadio = white;
 		defaultRadio->setChecked(true);
+		// Metadata
+		metadataGroup = new QGroupBox();
+		notes = new QLineEdit();
+		notes->setPlaceholderText("Notes");
+		pageNumber = new QLineEdit();
+		pageNumber->setPlaceholderText("page number");
 
 		// RHS
 		fileRead = new QGroupBox();
 		fileInput = new QLineEdit();
+		fileInput->setPlaceholderText("scan number");
 		loadButton = new QPushButton("load");
-
 		input = new QTextEdit(this);
 		// Buttons
 		save = new QPushButton("save", this);
@@ -70,7 +80,17 @@ Editor::Editor(QWidget *parent)
 		radioBox->addWidget(gray);
 		radioBox->addWidget(black);
 		whitelist->setLayout(radioBox);
-		layout->addWidget(whitelist, 2, 2, Qt::AlignRight);
+		//layout->addWidget(whitelist, 2, 2, Qt::AlignRight);
+		// Metadata
+		QHBoxLayout *metadataBox = new QHBoxLayout;
+		metadataBox->addWidget(notes);
+		metadataBox->addWidget(pageNumber);
+		metadataBox->addWidget(whitelist);
+		metadataGroup->setLayout(metadataBox);
+		metadataBox->setStretch(0, 1);
+		metadataBox->setStretch(1, 0);
+		metadataBox->setStretch(1, 0);
+		layout->addWidget(metadataGroup, 2, 0, 1, 3);
 		
 		// RHS
 		// File input
@@ -78,7 +98,6 @@ Editor::Editor(QWidget *parent)
 		fileBox->addWidget(fileInput);
 		fileBox->addWidget(loadButton);
 		fileBox->setStretch(0, 1);
-		fileBox->setStretch(1, 0);
 		fileRead->setLayout(fileBox);
 		layout->addWidget(fileRead, 0, 3, 1, 3);
 		// Text Editor
@@ -92,17 +111,29 @@ Editor::Editor(QWidget *parent)
 
 }
 
-void Editor::saveClicked() {
-	cout << input->toPlainText().toStdString() << endl;
-
-	// Write image to file
+void writeStringToFile(string fileName, string contents) {
 	ofstream file;
-	file.open("test.txt");
-
-	file << input->toPlainText().toStdString() << endl;
+	file.open(fileName);
+	file << contents << endl;
 	file.close();
+}
 
-	cout << getCheckedRadio() << endl;
+void Editor::saveClicked() {
+	// Get the directory based on page number
+	string dirName = "transcriptions/" + formatNumber(currentPage) + "/";
+	DIR *dir = opendir(dirName.c_str());
+	if (dir) {
+	} else if (ENOENT == errno) {
+		// Directory doesn't exist, create it
+		mkdir(dirName.c_str(), S_IRWXU | S_IRWXG);
+	}
+	dir = opendir(dirName.c_str());
+
+	// Write transcription to file
+	writeStringToFile(dirName + transcriptionFileName, input->toPlainText().toStdString());
+	writeStringToFile(dirName + whitelistFileName, getCheckedRadio());
+	writeStringToFile(dirName + pageNumberFileName, pageNumber->text().toStdString());
+	writeStringToFile(dirName + notesFileName, notes->text().toStdString());
 }
 
 string Editor::getCheckedRadio() {
@@ -119,10 +150,11 @@ string Editor::getCheckedRadio() {
 }
 
 void Editor::prevClicked() {
+	changePage(currentPage - 1);
 }
 
 void Editor::nextClicked() {
-	loadFile("input_test.txt");
+	changePage(currentPage + 1);
 }
 
 void getAllFiles() {
@@ -136,23 +168,65 @@ void getAllFiles() {
 	}
 }
 
-void Editor::loadFile(string fileName) {
+string readFile(string fileName) {
 	// Read from the file
 	ifstream file(fileName.c_str());
-	string s = "";
-	for (string line; getline(file, line); ) {
-		s.append(line).append("\n");
-	}
-	input->setText(QString::fromStdString(s));
-	// Reset the radio buttons
-	defaultRadio->setChecked(true);
-
-
+	stringstream buffer;
+	buffer << file.rdbuf();
+	string str = buffer.str();
+	return str.substr(0, str.size() - 1);
 }
 
 void Editor::loadClicked() {
-	QPixmap *pix = new QPixmap("scans/0000.jpg");
+	changePage(stoi(fileInput->text().toStdString()));
+}
+
+
+string formatNumber(int number) {
+	ostringstream str;
+	str << setw(4) << setfill('0') << number;
+	return str.str();
+}
+
+void Editor::changePage(int scanNumber) {
+	// Draw the new iamge
+	string str = formatNumber(scanNumber);
+	string toLoad = "scans/" + str + ".jpg";
+	currentPage = scanNumber;
+	QPixmap *pix = new QPixmap(toLoad.c_str());
 	scene->addPixmap(*pix);
 	image->fitInView(pix->rect(), Qt::KeepAspectRatio);
+
+	// Keep the file input in sync
+	fileInput->setText(str.c_str());
+
+	// Check to see if we've transcribed it before
+	string dirName = "transcriptions/" + formatNumber(currentPage) + "/";
+	DIR *dir = opendir(dirName.c_str());
+	if (dir) {
+		// Read in the old values
+		input->setText(QString::fromStdString(readFile(dirName + transcriptionFileName)));
+		pageNumber->setText(QString::fromStdString(readFile(dirName + pageNumberFileName)));
+		notes->setText(QString::fromStdString(readFile(dirName + notesFileName)));
+		string qualityValue = readFile(dirName + whitelistFileName);
+		if (qualityValue == "white") {
+			white->setChecked(true);
+		} else if (qualityValue == "gray") {
+			gray->setChecked(true);
+		} else if (qualityValue == "black") {
+			black->setChecked(true);
+		} else {
+			cout << "got bad value for whitelist: " << qualityValue << "/" << endl;
+		}
+
+	} else if (ENOENT == errno) {
+		// Didn't exist, just unset everything
+		input->setText("");
+		pageNumber->setText("");
+		notes->setText("");
+		defaultRadio->setChecked(true);
+	}
 }
+
+
 

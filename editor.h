@@ -41,8 +41,20 @@ class Editor: public QWidget {
 		QRadioButton *defaultRadio;
 
 		std::string getCheckedRadio();
+		void changePage(int);
+
+		QGroupBox *metadataGroup;
+		QLineEdit *notes;
+		QLineEdit *pageNumber;
+
+		int currentPage;
 
 		void loadFile(std::string);
+
+		std::string transcriptionFileName = "transcription.txt";
+		std::string whitelistFileName = "quality";
+		std::string pageNumberFileName = "page_number";
+		std::string notesFileName = "notes";
 
 	private slots:
 		void saveClicked();
