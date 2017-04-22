@@ -20,6 +20,7 @@
 using namespace std;
 
 string formatNumber(int);
+string readFile(string);
 
 Editor::Editor(QWidget *parent) 
 	:QWidget(parent) {
@@ -50,6 +51,7 @@ Editor::Editor(QWidget *parent)
 		fileRead = new QGroupBox();
 		fileInput = new QLineEdit();
 		fileInput->setPlaceholderText("scan number");
+		fileInput->setText(QString::fromStdString(readFile("last_page")));
 		loadButton = new QPushButton("load");
 		input = new QTextEdit(this);
 		// Buttons
@@ -80,7 +82,6 @@ Editor::Editor(QWidget *parent)
 		radioBox->addWidget(gray);
 		radioBox->addWidget(black);
 		whitelist->setLayout(radioBox);
-		//layout->addWidget(whitelist, 2, 2, Qt::AlignRight);
 		// Metadata
 		QHBoxLayout *metadataBox = new QHBoxLayout;
 		metadataBox->addWidget(notes);
@@ -118,8 +119,7 @@ void writeStringToFile(string fileName, string contents) {
 	file.close();
 }
 
-void Editor::saveClicked() {
-	// Get the directory based on page number
+void Editor::writeEverythingToFile() {
 	string dirName = "transcriptions/" + formatNumber(currentPage) + "/";
 	DIR *dir = opendir(dirName.c_str());
 	if (dir) {
@@ -134,6 +134,13 @@ void Editor::saveClicked() {
 	writeStringToFile(dirName + whitelistFileName, getCheckedRadio());
 	writeStringToFile(dirName + pageNumberFileName, pageNumber->text().toStdString());
 	writeStringToFile(dirName + notesFileName, notes->text().toStdString());
+}
+
+void Editor::saveClicked() {
+	// Get the directory based on page number
+	string dirName = "transcriptions/" + formatNumber(currentPage) + "/";
+	writeEverythingToFile();
+	writeStringToFile("last_page", formatNumber(currentPage));
 }
 
 string Editor::getCheckedRadio() {
@@ -189,6 +196,10 @@ string formatNumber(int number) {
 }
 
 void Editor::changePage(int scanNumber) {
+
+	// Save
+	writeEverythingToFile();
+
 	// Draw the new iamge
 	string str = formatNumber(scanNumber);
 	string toLoad = "scans/" + str + ".jpg";

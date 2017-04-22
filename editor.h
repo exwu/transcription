@@ -51,6 +51,8 @@ class Editor: public QWidget {
 
 		void loadFile(std::string);
 
+		void writeEverythingToFile();
+
 		std::string transcriptionFileName = "transcription.txt";
 		std::string whitelistFileName = "quality";
 		std::string pageNumberFileName = "page_number";
