@@ -3,5 +3,5 @@
 - add metadata field to ui
 - write metadata to file on save
 - read metadata from file on save
-- allow image cropping
-- toggle between cropped and non cropped
+//- allow image cropping
+//- toggle between cropped and non cropped

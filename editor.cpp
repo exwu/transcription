@@ -14,6 +14,8 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QGraphicsScene>
+#include <QPointF>
+#include <QRect>
 
 using namespace std;
 
@@ -24,12 +26,7 @@ Editor::Editor(QWidget *parent)
 		scene = new QGraphicsScene(this);
 		image = new QGraphicsView(scene);
 		image->setScene(scene);
-		image->setDragMode(QGraphicsView::RubberBandDrag);
 		scene->setBackgroundBrush(Qt::gray);
-		// Image cropping
-		saveCrop = new QPushButton("save crop", this);
-		toggleCrop = new QPushButton("view crop", this);
-		toggleCrop->setCheckable(true);
 		// Radios
 		whitelist = new QGroupBox();
 		white = new QRadioButton("white");
@@ -67,9 +64,6 @@ Editor::Editor(QWidget *parent)
 		// LHS
 		// Image
 		layout->addWidget(image, 0, 0, 2, 3);
-		// Cropping
-		layout->addWidget(saveCrop, 2, 0);
-		layout->addWidget(toggleCrop, 2, 1);
 		// Radio
 		QHBoxLayout *radioBox = new QHBoxLayout;
 		radioBox->addWidget(white);
@@ -136,7 +130,6 @@ void getAllFiles() {
 	class dirent *ent;
 
 	dir = opendir("scans");
-	cout << "hi" << endl;
 	while ((ent = readdir(dir)) != NULL) {
 		const string file_name = ent->d_name;
 		cout << file_name << endl;
@@ -162,3 +155,4 @@ void Editor::loadClicked() {
 	scene->addPixmap(*pix);
 	image->fitInView(pix->rect(), Qt::KeepAspectRatio);
 }
+

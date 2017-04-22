@@ -11,6 +11,8 @@ class QLabel;
 class QGraphicsView;
 class QGraphicsScene;
 class QLineEdit;
+class QPointF;
+class QRect;
 
 class Editor: public QWidget {
 	Q_OBJECT
@@ -31,8 +33,6 @@ class Editor: public QWidget {
 
 		QGraphicsView *image;
 		QGraphicsScene *scene;
-		QPushButton *saveCrop;
-		QPushButton *toggleCrop;
 
 		QGroupBox *whitelist;
 		QRadioButton *white;
