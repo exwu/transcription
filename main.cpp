@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
 	QApplication app(argc, argv);
 
 	Editor editor;
-	editor.showFullScreen();
+//	editor.showFullScreen();
 
 
 	editor.show();
