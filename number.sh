@@ -1,4 +1,4 @@
-i=0
+i=$1
 
 for file in $( ls ); do
 	echo file: $file , $i
