@@ -1,9 +1,10 @@
 #include "editor.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <iomanip>
-#include <dirent.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 #include <QPushButton>
 #include <QTextEdit>
@@ -16,6 +17,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QGraphicsScene>
+#include <QWidget>
 
 using namespace std;
 
@@ -120,6 +122,8 @@ void writeStringToFile(string fileName, string contents) {
 }
 
 void Editor::writeEverythingToFile() {
+  if (input->toPlainText().toStdString() == "") return;
+
 	string dirName = "transcriptions/" + formatNumber(currentPage) + "/";
 	DIR *dir = opendir(dirName.c_str());
 	if (dir) {
@@ -162,17 +166,6 @@ void Editor::prevClicked() {
 
 void Editor::nextClicked() {
 	changePage(currentPage + 1);
-}
-
-void getAllFiles() {
-	DIR *dir;
-	class dirent *ent;
-
-	dir = opendir("scans");
-	while ((ent = readdir(dir)) != NULL) {
-		const string file_name = ent->d_name;
-		cout << file_name << endl;
-	}
 }
 
 string readFile(string fileName) {
