@@ -96,12 +96,11 @@ Editor::Editor(QWidget *parent)
 		whitelist->setLayout(radioBox);
 		// Metadata
 		QHBoxLayout *metadataBox = new QHBoxLayout;
-		metadataBox->addWidget(notes);
+		//metadataBox->addWidget(notes);
 		metadataBox->addWidget(pageNumber);
 		metadataBox->addWidget(whitelist);
 		metadataGroup->setLayout(metadataBox);
 		metadataBox->setStretch(0, 1);
-		metadataBox->setStretch(1, 0);
 		metadataBox->setStretch(1, 0);
 		layout->addWidget(metadataGroup, 2, 3, 1, 3);
 		
