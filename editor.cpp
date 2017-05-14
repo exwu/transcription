@@ -77,7 +77,17 @@ Editor::Editor(QWidget *parent)
 		layout->setColumnStretch(5, 10);
 		// LHS
 		// Image
-		layout->addWidget(image, 0, 0, 2, 3);
+		layout->addWidget(image, 0, 0, 4, 3);
+		// RHS
+		// File input
+		QHBoxLayout *fileBox = new QHBoxLayout;
+		fileBox->addWidget(fileInput);
+		fileBox->addWidget(loadButton);
+		fileBox->setStretch(0, 1);
+		fileRead->setLayout(fileBox);
+		layout->addWidget(fileRead, 0, 3, 1, 3);
+		// Text Editor
+		layout->addWidget(input, 1, 3, 1, 3);
 		// Radio
 		QHBoxLayout *radioBox = new QHBoxLayout;
 		radioBox->addWidget(white);
@@ -93,22 +103,12 @@ Editor::Editor(QWidget *parent)
 		metadataBox->setStretch(0, 1);
 		metadataBox->setStretch(1, 0);
 		metadataBox->setStretch(1, 0);
-		layout->addWidget(metadataGroup, 2, 0, 1, 3);
+		layout->addWidget(metadataGroup, 2, 3, 1, 3);
 		
-		// RHS
-		// File input
-		QHBoxLayout *fileBox = new QHBoxLayout;
-		fileBox->addWidget(fileInput);
-		fileBox->addWidget(loadButton);
-		fileBox->setStretch(0, 1);
-		fileRead->setLayout(fileBox);
-		layout->addWidget(fileRead, 0, 3, 1, 3);
-		// Text Editor
-		layout->addWidget(input, 1, 3, 1, 3);
 		// Buttons
-		layout->addWidget(prev, 2, 3);
-		layout->addWidget(save, 2, 4);
-		layout->addWidget(next, 2, 5);
+		layout->addWidget(prev, 3, 3);
+		layout->addWidget(save, 3, 4);
+		layout->addWidget(next, 3, 5);
 
 		setLayout(layout);
 
