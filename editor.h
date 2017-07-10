@@ -42,7 +42,7 @@ class Editor: public QWidget {
 		QRadioButton *defaultRadio;
 
 		std::string getCheckedRadio();
-		void changePage(int);
+		bool changePage(int);
 
 		QGroupBox *metadataGroup;
 		QLineEdit *notes;

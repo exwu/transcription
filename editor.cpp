@@ -160,11 +160,16 @@ string Editor::getCheckedRadio() {
 }
 
 void Editor::prevClicked() {
-	changePage(currentPage - 1);
+  changePage(currentPage - 1);
 }
 
 void Editor::nextClicked() {
-	changePage(currentPage + 1);
+  int currentPageNumber = stoi(pageNumber->text().toStdString());
+	bool pageExisted = changePage(currentPage + 1);
+  // Autoincrement the page number if it didn't exist. 
+  if (!pageExisted) {
+    pageNumber->setText(QString::fromStdString(std::to_string(currentPageNumber + 1)));
+  }
 }
 
 string readFile(string fileName) {
@@ -187,7 +192,7 @@ string formatNumber(int number) {
 	return str.str();
 }
 
-void Editor::changePage(int scanNumber) {
+bool Editor::changePage(int scanNumber) {
 
 	// Save
 	writeEverythingToFile();
@@ -221,14 +226,16 @@ void Editor::changePage(int scanNumber) {
 		} else {
 			cout << "got bad value for whitelist: " << qualityValue << "/" << endl;
 		}
-
+    return true;
 	} else if (ENOENT == errno) {
 		// Didn't exist, just unset everything
 		input->setText("");
 		pageNumber->setText("");
 		notes->setText("");
 		defaultRadio->setChecked(true);
+    return false;
 	}
+  return false;
 }
 
 
