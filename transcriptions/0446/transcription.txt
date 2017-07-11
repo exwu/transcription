@@ -1,0 +1,23 @@
+though we'd only be able to allow you limited access outside, due to your unusual appearance, and the need for regular medical attention. Will you augur for us?"
+
+Sebastian was silent. He kept his eyes to the ground. 
+
+"I'll think about it," he said, at last. 
+
+"I'll check back [[I'll be back]] tomorrow for your answer. Please consider it carefully until then."
+
+Dr. Alto bowed out to excuse himself. As he turned to leave, Sebastian called out to him. 
+
+"Wait, Dr. Alto."
+
+"Yes?"
+
+"When you brought me here---with me, there was another."
+
+"You mean H-473, the Empath?"
+
+"Is...she okay?"
+
+"She's here, in this facility," he said. "At least for now. They are due to move soon." [[back to their old facility]]
+
+"Could I see her?" Sebastian said, trying to keep the quaver
