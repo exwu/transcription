@@ -1,0 +1,25 @@
+"No. Not me. Sebastian," Erika said. "This other car looks like it's in better shape than yours."
+
+"Yeah, it's the one I leant to Sebastian. I was going to see if I could get it out of the mud."
+
+"Do you need a hand?"
+
+Jared revved the car while Erika pushed from the front. A moment later it was free. Jared back it onto the road. 
+
+"You need a ride?" he said, pushing open the door. 
+
+[[perplexed at his own kindness]]
+
+"If you don't mind," she said. 
+
+"You don't happen to know where he is, Sebastian? Technically I've got to bring him back to the Foundation," he asked once she was seated. 
+
+Erika shook his head. "He's gone now. Dead."
+
+"Oh."
+
+Jared stopped the car. He stared blankly at the empty road. After a moment, he started driving again. 
+
+"Sorry for not believing you, but you two don't have the best track recrod for resisting containment. I---"
+
+[[ he also wants to take Erika back to the Foundation ]]
