@@ -1,1 +1,1 @@
-./transcription.app/Contents/MacOS/transcriptio
+./transcription.app/Contents/MacOS/transcription
