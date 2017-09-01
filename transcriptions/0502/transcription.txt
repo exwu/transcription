@@ -1,5 +1,5 @@
 violates the principle of 
-locality, occuring faster than allowed 
+locality, occurring faster than allowed 
 by the speed of light. 
 
 Instantaneous communication has 
