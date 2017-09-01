@@ -1,11 +1,26 @@
 skip to the end," said Jared.
 
-Sebastian flipped through the pages until he came across a section printed in newer typeface. It was dated for the day before. 
+Sebastian flipped through the pages 
+until he came across a section printed 
+in newer typeface. It was dated 
+for the day before. 
 
-"Upon re-entering H-793 was subjected to the following tests:
+"Upon re-entering H-793 
+was subjected to the following tests:
 - salivary gland remote stimulation
 - and so on so forth
 
 See appendix I-83 for details.
 
-Neural responses were recorded with nanosecond precision with an atomic clock. Synchronized clocks were also used to time both the source of the stiulus and H-793. The data gathered shows that stimulus and subject reaction occur simultaneously, even at distances greater than 400m. Effect is reproducible across mutliple sessions. Assuming no operator or machine error, this implies H-793's perceptions of other's emotional states
+Neural responses were recorded with 
+nanosecond precision with an atomic 
+clock. Synchronized clocks were also used to 
+time both the source of the stimulus and 
+H-793. The data gathered shows that 
+stimulus and subject reaction occur 
+simultaneously, even at distances 
+greater than 400m. Effect is 
+reproducible across multiple sessions. 
+Assuming no operator or machine error, 
+this implies H-793's perceptions 
+of other's emotional states
