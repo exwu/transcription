@@ -12,9 +12,9 @@ Some transcribing standards to follow:
 
 Whitelisting notes: 
 
-- white: pages with minimal cross outs and double text notes
-- gray: pages with lots of cross outs and notes
-- black: none yet, but stuff with lots of rearranging 
+- white: pages with minimal cross outs and double text notes, could expect a program to do well on this
+- gray: pages with lots of cross outs and notes, a program might have trouble with this
+- black: none yet, but stuff with lots of rearranging, transcription is wrong, no program could be expected to transcribe this
 
 But I'll probably change it in the future to 
 - white: actually good; no cross outs or text notes
